@@ -1,5 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../csv-render/csv-render.html">
+<link rel="import" href="../hax-body-behaviors/hax-body-behaviors.html">
+<link rel="import" href="../schema-behaviors/schema-behaviors.html">
 
 <!--
 `lrn-table`
@@ -21,7 +23,7 @@ A LRN element
     <div typeof="oer:SupportingMaterial">
       <div class="hidden-title" property="oer:name">{{title}}</div>
       <div property="oer:description">
-        <content></content>
+        <slot></slot>
         <csv-render data-source="{{csvFile}}" caption="{{title}}" summary="{{description}}"></csv-render>
       </div>
     </div>
@@ -30,6 +32,7 @@ A LRN element
   <script>
     Polymer({
       is: 'lrn-table',
+      behaviors: [HAXBehaviors.PropertiesBehaviors, SchemaBehaviors.Schema],
       properties: {
         /**
          * Title of this table. This is both for accessibility and presentation.
@@ -56,7 +59,78 @@ A LRN element
           reflectToAttribute: true,
         },
       },
-
+      /**
+       * Ready.
+       */
+      ready: function() {
+        // Establish hax properties if they exist
+        let props = {
+          'canScale': true,
+          'canPosition': true,
+          'canEditSource': false,
+          'gizmo': {
+            'title': 'CSV table',
+            'description': 'This can generate a table from a CSV file no matter where it is located.',
+            'icon': 'editor:border-all',
+            'color': 'green',
+            'groups': ['Presentation', 'Table', 'Data'],
+            'handles': [
+              {
+                'type': 'data',
+                'url': 'csvFile'
+              }
+            ],
+            'meta': {
+              'author': 'LRNWebComponents'
+            }
+          },
+          'settings': {
+            'quick': [
+              {
+                'property': 'csvFile',
+                'title': 'Source',
+                'description': 'The URL for this csv file.',
+                'inputMethod': 'textfield',
+                'icon': 'link',
+                'required': true,
+              },
+              {
+                'property': 'title',
+                'title': 'Title',
+                'description': 'Title for the table to be generated.',
+                'inputMethod': 'textfield',
+                'icon': 'editor:title',
+              },
+            ],
+            'configure': [
+              {
+                'property': 'csvFile',
+                'title': 'Source',
+                'description': 'The URL for this csv file.',
+                'inputMethod': 'textfield',
+                'icon': 'link',
+                'required': true,
+              },
+              {
+                'property': 'title',
+                'title': 'Title',
+                'description': 'Title for the table to be generated.',
+                'inputMethod': 'textfield',
+                'icon': 'editor:title',
+              },
+              {
+                'property': 'description',
+                'title': 'Description',
+                'description': 'More detailed description for improved accessibility of the table data.',
+                'inputMethod': 'textarea',
+                'icon': 'editor:title',
+              },
+            ],
+            'advanced': []
+          }
+        };
+        this.setHaxProperties(props);
+      },
     });
   </script>
 </dom-module>
