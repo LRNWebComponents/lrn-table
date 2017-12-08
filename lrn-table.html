@@ -60,9 +60,9 @@ A LRN element
         },
       },
       /**
-       * Ready.
+       * attached.
        */
-      ready: function() {
+      attached: function() {
         // Establish hax properties if they exist
         let props = {
           'canScale': true,
@@ -76,7 +76,7 @@ A LRN element
             'groups': ['Presentation', 'Table', 'Data'],
             'handles': [
               {
-                'type': 'data',
+                'type': 'csv',
                 'url': 'csvFile'
               }
             ],
